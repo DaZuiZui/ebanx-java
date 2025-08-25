@@ -3,42 +3,41 @@ package com.example.demo.domain;
 import java.io.Serializable;
 
 public class EbanxPayment implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    private Long id;  // 主键
-    private Integer version;  // 乐观锁
-    private String createBy;  // 创建人
-    private Long createAt;  // 创建时间(毫秒)
-    private String updateBy;  // 更新人
-    private Long updateAt;  // 修改时间(毫秒)
-    private Integer status;  // 数据状态 0:正常 1:删除
+    private Long id;  // Primary key
+    private Integer version;  // Optimistic lock
+    private String createBy;  // Created by
+    private Long createAt;    // Creation time (in milliseconds)
+    private String updateBy;  // Updated by
+    private Long updateAt;    // Update time (in milliseconds)
+    private Integer status;   // Data status: 0: active, 1: deleted
 
-    private Long subscriptionId;  // 关联的订阅ID
-    private Long userId;  // 用户ID
-    private Integer appId;  // 应用ID
+    private Long subscriptionId;  // Associated subscription ID
+    private Long userId;          // User ID
+    private Integer appId;        // Application ID
 
-    // 支付信息
-    private String ebanxPaymentId;  // EBANX支付ID
-    private String orderNo;  // 业务订单号
-    private Double amount;  // 支付金额
-    private String currency;  // 货币
+    // Payment information
+    private String ebanxPaymentId;  // EBANX payment ID
+    private String orderNo;         // Business order number
+    private Double amount;          // Payment amount
+    private String currency;        // Currency
 
-    // 状态
-    private String state;  // 支付状态: pending / success / failed / refunded
-    private String failReason;  // 失败原因
+    // Status
+    private String state;           // Payment status: pending / success / failed / refunded
+    private String failReason;      // Failure reason
 
-    // 支付方式
-    private String paymentMethod;  // 支付方式: card / pix
-    private String token;  // 本次支付的token(一次性token，仅调试用)
+    // Payment method
+    private String paymentMethod;   // Payment method: card / pix
+    private String token;           // Token for this payment (one-time token, for debugging only)
 
-    // Pix 特有
-    private String pixQrCode;  // Pix支付二维码
-    private String pixEnrollmentId;  // Pix签约ID
+    // Pix-specific
+    private String pixQrCode;       // Pix payment QR code
+    private String pixEnrollmentId; // Pix enrollment ID
 
-    // 回调/对账
-    private Long notifiedAt;  // 最后一次收到回调的时间
-    private String rawCallback;  // Webhook回调原始数据
+    // Callback/Reconciliation
+    private Long notifiedAt;        // Last time the callback was received
+    private String rawCallback;     // Raw Webhook callback data
 
     // Getters and Setters
     public Long getId() {
