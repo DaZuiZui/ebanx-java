@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.clinet;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,12 +32,10 @@ public class EbanxApiClient {
      */
     public JSONObject testConnection() {
         try {
-            // 构建请求体
             JSONObject requestBody = new JSONObject();
             requestBody.put("integration_key", API_KEY);
             requestBody.put("operation", "request");
 
-            // 最小合法 payment 对象
             JSONObject payment = new JSONObject();
 
             String uuidPart = UUID.randomUUID().toString().replace("-", "").substring(0, 32);
@@ -54,7 +52,7 @@ public class EbanxApiClient {
             payment.put("currency_code", "BRL");
             payment.put("payment_type_code", "creditcard");
 
-            // 最小信用卡信息（沙箱测试卡）
+            // card info
             JSONObject creditCard = new JSONObject();
             creditCard.put("card_number", "5200000000001096");
             creditCard.put("card_name", "Test User");
@@ -64,18 +62,16 @@ public class EbanxApiClient {
             payment.put("creditcard", creditCard);
             requestBody.put("payment", payment);
 
-            // 构建 HTTP 请求
+            //  send http req
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL))
                     .timeout(Duration.ofSeconds(10))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                     .build();
-
-            // 发送请求
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // 返回结果
+            // ress
             return new JSONObject()
                     .put("success", true)
                     .put("statusCode", response.statusCode())

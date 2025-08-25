@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.config.EbanxApiClient;
+import com.example.demo.clinet.EbanxApiClient;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
