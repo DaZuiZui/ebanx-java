@@ -5,6 +5,7 @@ import com.example.demo.clinet.EbanxApiClient;
 import com.example.demo.domain.EbanxPayment;
 import com.example.demo.domain.EbanxSubscription;
 import com.example.demo.service.EbanxPaymentServiceImpl;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,63 @@ public class DropInApplication {
         String sandboxTmpCardToken = ebanxApiClient.getSandboxTmpCardToken();
         EbanxPayment ebanxPayment = ebanxPaymentService.savePayment(ebanxSubscription.getId(), sandboxTmpCardToken);
         //2.2
+        JSONObject jsonObject = ebanxApiClient.chargeWithToken(sandboxTmpCardToken);
+        log.info(jsonObject.toString());
+        JSONObject payment = jsonObject.getJSONObject("payment");
+
+        String ebanxPaymentId = payment.getString("hash");
+        String status = payment.getString("status"); // CO / PE / FA / CA
+        String amount = payment.getString("amount_ext");
+        String currency = payment.getString("currency_ext");
+
+        JSONObject txnStatus = payment.getJSONObject("transaction_status");
+        String authCode = txnStatus.getString("authcode");
+
+
+        String statusDate = payment.getString("status_date");
+        String openDate = payment.getString("open_date");
+        String confirmDate = payment.getString("confirm_date");
+        String dueDate = payment.getString("due_date");
+        String amountBr = payment.getString("amount_br");
+        String amountIof = payment.getString("amount_iof");
+        String merchantPaymentCode = payment.getString("merchant_payment_code");
+        String paymentType = payment.getString("payment_type_code");
+        String instalments = payment.getString("instalments");
+        boolean captureAvailable = payment.getBoolean("capture_available");
+        String billingDescriptor = payment.getJSONObject("details").getString("billing_descriptor");
+
+
+        if (status.equals("CO")){
+            ebanxPayment.setState("success");
+            log.info("success............");
+        }
+
+
+        // 取长期 card token
+        String cardToken = null;
+        if (payment.has("creditcard")) {
+            JSONObject creditCard = payment.getJSONObject("creditcard");
+            if (creditCard.has("token")) {
+                cardToken = creditCard.getString("token");      // 这就是长期 token
+            }
+        }
+
+        //ebanxPayment.setUpdateAt(Long.valueOf(statusDate));
+        ebanxPayment.setAmount(Double.valueOf(amount));
+        ebanxPayment.setCurrency(currency);
+
+        ebanxPayment.setEbanxPaymentId(ebanxPaymentId);
+        ebanxSubscription.setLatestPaymentId(null);
+        ebanxSubscription.setCurrentPeriodStart(1l);
+        ebanxSubscription.setCurrentPeriodEnd(5l);
+        ebanxSubscription.setCardToken(cardToken);
+
+
+        log.info("package info:");
+        log.info(String.valueOf(ebanxPayment));
+        log.info(String.valueOf(ebanxSubscription));
+
+
     }
 
 

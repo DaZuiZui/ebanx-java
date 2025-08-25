@@ -215,4 +215,32 @@ public class EbanxPayment implements Serializable {
     public void setRawCallback(String rawCallback) {
         this.rawCallback = rawCallback;
     }
+
+    @Override
+    public String toString() {
+        return "EbanxPayment{" +
+                "id=" + id +
+                ", version=" + version +
+                ", createBy='" + createBy + '\'' +
+                ", createAt=" + createAt +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateAt=" + updateAt +
+                ", status=" + status +
+                ", subscriptionId=" + subscriptionId +
+                ", userId=" + userId +
+                ", appId=" + appId +
+                ", ebanxPaymentId='" + ebanxPaymentId + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", state='" + state + '\'' +
+                ", failReason='" + failReason + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", token='" + token + '\'' +
+                ", pixQrCode='" + pixQrCode + '\'' +
+                ", pixEnrollmentId='" + pixEnrollmentId + '\'' +
+                ", notifiedAt=" + notifiedAt +
+                ", rawCallback='" + rawCallback + '\'' +
+                '}';
+    }
 }

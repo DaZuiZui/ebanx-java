@@ -96,6 +96,34 @@ public class EbanxSubscription implements Serializable {
         this.userId = userId;
     }
 
+    @Override
+    public String toString() {
+        return "EbanxSubscription{" +
+                "id=" + id +
+                ", version=" + version +
+                ", createBy='" + createBy + '\'' +
+                ", createAt=" + createAt +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateAt=" + updateAt +
+                ", status=" + status +
+                ", userId=" + userId +
+                ", appId=" + appId +
+                ", subscriptionType='" + subscriptionType + '\'' +
+                ", state='" + state + '\'' +
+                ", currentProductId=" + currentProductId +
+                ", currentPeriodStart=" + currentPeriodStart +
+                ", currentPeriodEnd=" + currentPeriodEnd +
+                ", cancelAt=" + cancelAt +
+                ", canceledAt=" + canceledAt +
+                ", ebanxCustomerId='" + ebanxCustomerId + '\'' +
+                ", ebanxSubscriptionId='" + ebanxSubscriptionId + '\'' +
+                ", cardToken='" + cardToken + '\'' +
+                ", pixEnrollmentId='" + pixEnrollmentId + '\'' +
+                ", latestPaymentId=" + latestPaymentId +
+                ", metadata='" + metadata + '\'' +
+                '}';
+    }
+
     public Integer getAppId() {
         return appId;
     }

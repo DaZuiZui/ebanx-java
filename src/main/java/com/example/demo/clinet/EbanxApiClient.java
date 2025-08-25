@@ -120,4 +120,48 @@ public class EbanxApiClient {
     }
 
 
+    
+    public JSONObject chargeWithToken(String token) {
+        try {
+            String url = "https://sandbox.ebanxpay.com/ws/direct";
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("integration_key", API_KEY);
+            requestBody.put("operation", "request");
+
+            JSONObject payment = new JSONObject();
+            payment.put("name", "Test User");
+            payment.put("email", "test@example.com");
+            payment.put("document", "39053344705"); // 沙箱 CPF
+            payment.put("merchant_payment_code", UUID.randomUUID().toString());
+            payment.put("amount_total", 100.00);
+            payment.put("currency_code", "BRL");
+            payment.put("payment_type_code", "creditcard");
+
+            JSONObject creditcard = new JSONObject();
+            creditcard.put("token", token); // 临时 token
+            creditcard.put("cvv", "123");   // CVV 还是必须传
+            payment.put("creditcard", creditcard);
+
+            requestBody.put("payment", payment);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient()
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+
+            log.info("Charge response: {}", response.body());
+
+            return new JSONObject(response.body());
+
+        } catch (Exception e) {
+            return new JSONObject().put("success", false).put("message", e.getMessage());
+        }
+    }
+
+
 }
