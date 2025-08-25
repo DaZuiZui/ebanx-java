@@ -36,6 +36,16 @@ class DemoApplicationTests {
         log.info(String.valueOf(jsonObject));
     }
 
+    /**
+     * get tmp token
+     * @throws Exception
+     */
+    @Test
+    void getSandboTmpCardToken() throws Exception {
+        String sandboTmpCardToken = ebanxApiClient.getSandboxTmpCardToken();
+        log.info(sandboTmpCardToken);
+    }
+
 
 
 }

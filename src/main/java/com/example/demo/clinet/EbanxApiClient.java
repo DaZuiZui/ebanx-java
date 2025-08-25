@@ -1,6 +1,8 @@
 package com.example.demo.clinet;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Component
 public class EbanxApiClient {
 
+    private static final Logger log = LoggerFactory.getLogger(EbanxApiClient.class);
     @Value("${ebanx.apiURL}")
     private String API_URL;
 
@@ -83,4 +86,38 @@ public class EbanxApiClient {
                     .put("message", e.getMessage());
         }
     }
+
+    /**
+     * getSandboxTmpCardToken
+     * @return
+     * @throws Exception
+     */
+    public String getSandboxTmpCardToken() throws Exception {
+        String url = "https://sandbox.ebanxpay.com/ws/token";
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("integration_key", API_KEY);
+
+        JSONObject creditCard = new JSONObject();
+        creditCard.put("card_number", "5200000000001096"); // 沙箱测试卡
+        creditCard.put("card_name", "Test User");
+        creditCard.put("card_due_date", "12/2030");
+        creditCard.put("card_cvv", "123");
+
+        requestBody.put("creditcard", creditCard);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                .build();
+
+        HttpResponse<String> response = HttpClient.newHttpClient()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+        JSONObject json = new JSONObject(response.body());
+        return json.getString("token"); // EBANX 返回的临时 token
+    }
+
+
 }
