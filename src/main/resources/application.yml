@@ -2,3 +2,4 @@ server:
   port: 9999
 ebanx:
     integrationKey: yourkey
+    apiURL: https://sandbox.ebanx.com/ws/direct
