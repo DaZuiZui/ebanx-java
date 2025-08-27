@@ -180,4 +180,66 @@ public class EbanxApiClient {
 
 
 
+
+    /**
+     * get QR
+     * @param subscriptionId 订阅ID
+     * @param amount 支付金额
+     * @return JSONObject 返回EBANX支付响应，包括二维码
+     */
+    public JSONObject getQR(Long subscriptionId, Double amount) {
+        try {
+            String url = "https://sandbox.ebanxpay.com/ws/direct";
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("integration_key", API_KEY);
+            requestBody.put("operation", "request");
+
+            JSONObject payment = new JSONObject();
+            payment.put("merchant_payment_code", "SUBS-" + subscriptionId);
+            payment.put("amount_total", amount);
+            payment.put("currency_code", "BRL");
+            payment.put("payment_type_code", "pix");        // Pix支付
+            payment.put("name", "Test User");               // 必填
+            payment.put("email", "test@example.com");       // 必填
+            payment.put("document", "39053344705");  // ⚠️ 必填字段
+
+            JSONObject person = new JSONObject();
+            person.put("name", "Test User");
+            person.put("email", "test@example.com");
+            person.put("document", "39053344705");        // 沙箱CPF
+            person.put("type", "personal");
+            payment.put("person", person);
+
+            requestBody.put("payment", payment);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient()
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+
+            JSONObject jsonResponse = new JSONObject(response.body());
+            log.info("Pix payment response: {}", jsonResponse.toString());
+
+            // 提取二维码
+            if ("SUCCESS".equalsIgnoreCase(jsonResponse.optString("status"))) {
+                JSONObject paymentResult = jsonResponse.getJSONObject("payment");
+                String qrCode = paymentResult.has("qr_code") ? paymentResult.getString("qr_code") : null;
+                String qrCodeBase64 = paymentResult.has("qr_code_base64") ? paymentResult.getString("qr_code_base64") : null;
+
+                jsonResponse.put("qr_code", qrCode != null ? qrCode : qrCodeBase64);
+            }
+
+            return jsonResponse;
+
+        } catch (Exception e) {
+            return new JSONObject().put("success", false).put("message", e.getMessage());
+        }
+    }
+
+
 }
