@@ -1,7 +1,6 @@
 package com.example.demo.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class EbanxSubscription implements Serializable {
 
@@ -10,6 +9,10 @@ public class EbanxSubscription implements Serializable {
     private Long id;          // Primary key
     private Integer version;  // Optimistic lock
     private String createBy;  // Created by
+
+    public EbanxSubscription() {
+    }
+
     private Long createAt;    // Creation time (in milliseconds)
     private String updateBy;  // Updated by
     private Long updateAt;    // Update time (in milliseconds)
@@ -29,9 +32,39 @@ public class EbanxSubscription implements Serializable {
     private String pixEnrollmentId;  // Pix enrollment ID (enrollment_id)
     private Long latestPaymentId;    // Latest payment ID
     private String metadata;         // Subscription metadata (JSON)
+    private Double amount;           // Subscription amount per period
+    private String currency;          // currency
 
+    @Override
+    public String toString() {
+        return "EbanxSubscription{" +
+                "id=" + id +
+                ", version=" + version +
+                ", createBy='" + createBy + '\'' +
+                ", createAt=" + createAt +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateAt=" + updateAt +
+                ", status=" + status +
+                ", userId=" + userId +
+                ", appId=" + appId +
+                ", subscriptionType='" + subscriptionType + '\'' +
+                ", state='" + state + '\'' +
+                ", currentProductId=" + currentProductId +
+                ", currentPeriodStart=" + currentPeriodStart +
+                ", currentPeriodEnd=" + currentPeriodEnd +
+                ", cancelAt=" + cancelAt +
+                ", canceledAt=" + canceledAt +
+                ", ebanxCustomerId='" + ebanxCustomerId + '\'' +
+                ", ebanxSubscriptionId='" + ebanxSubscriptionId + '\'' +
+                ", cardToken='" + cardToken + '\'' +
+                ", pixEnrollmentId='" + pixEnrollmentId + '\'' +
+                ", latestPaymentId=" + latestPaymentId +
+                ", metadata='" + metadata + '\'' +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                '}';
+    }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -94,34 +127,6 @@ public class EbanxSubscription implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "EbanxSubscription{" +
-                "id=" + id +
-                ", version=" + version +
-                ", createBy='" + createBy + '\'' +
-                ", createAt=" + createAt +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateAt=" + updateAt +
-                ", status=" + status +
-                ", userId=" + userId +
-                ", appId=" + appId +
-                ", subscriptionType='" + subscriptionType + '\'' +
-                ", state='" + state + '\'' +
-                ", currentProductId=" + currentProductId +
-                ", currentPeriodStart=" + currentPeriodStart +
-                ", currentPeriodEnd=" + currentPeriodEnd +
-                ", cancelAt=" + cancelAt +
-                ", canceledAt=" + canceledAt +
-                ", ebanxCustomerId='" + ebanxCustomerId + '\'' +
-                ", ebanxSubscriptionId='" + ebanxSubscriptionId + '\'' +
-                ", cardToken='" + cardToken + '\'' +
-                ", pixEnrollmentId='" + pixEnrollmentId + '\'' +
-                ", latestPaymentId=" + latestPaymentId +
-                ", metadata='" + metadata + '\'' +
-                '}';
     }
 
     public Integer getAppId() {
@@ -220,7 +225,7 @@ public class EbanxSubscription implements Serializable {
         this.pixEnrollmentId = pixEnrollmentId;
     }
 
-    public Long getLatestPaymentId() {
+    public Long getLatestPaymentId(Long id) {
         return latestPaymentId;
     }
 
@@ -234,5 +239,48 @@ public class EbanxSubscription implements Serializable {
 
     public void setMetadata(String metadata) {
         this.metadata = metadata;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public EbanxSubscription(Long id, Integer version, String createBy, Long createAt, String updateBy, Long updateAt, Integer status, Long userId, Integer appId, String subscriptionType, String state, Long currentProductId, Long currentPeriodStart, Long currentPeriodEnd, Long cancelAt, Long canceledAt, String ebanxCustomerId, String ebanxSubscriptionId, String cardToken, String pixEnrollmentId, Long latestPaymentId, String metadata, Double amount, String currency) {
+        this.id = id;
+        this.version = version;
+        this.createBy = createBy;
+        this.createAt = createAt;
+        this.updateBy = updateBy;
+        this.updateAt = updateAt;
+        this.status = status;
+        this.userId = userId;
+        this.appId = appId;
+        this.subscriptionType = subscriptionType;
+        this.state = state;
+        this.currentProductId = currentProductId;
+        this.currentPeriodStart = currentPeriodStart;
+        this.currentPeriodEnd = currentPeriodEnd;
+        this.cancelAt = cancelAt;
+        this.canceledAt = canceledAt;
+        this.ebanxCustomerId = ebanxCustomerId;
+        this.ebanxSubscriptionId = ebanxSubscriptionId;
+        this.cardToken = cardToken;
+        this.pixEnrollmentId = pixEnrollmentId;
+        this.latestPaymentId = latestPaymentId;
+        this.metadata = metadata;
+        this.amount = amount;
+        this.currency = currency;
     }
 }

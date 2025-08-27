@@ -120,8 +120,7 @@ public class EbanxApiClient {
     }
 
 
-    
-    public JSONObject chargeWithToken(String token) {
+    public JSONObject chargeWithToken(String token, Double amount) {
         try {
             String url = "https://sandbox.ebanxpay.com/ws/direct";
 
@@ -134,13 +133,15 @@ public class EbanxApiClient {
             payment.put("email", "test@example.com");
             payment.put("document", "39053344705"); // 沙箱 CPF
             payment.put("merchant_payment_code", UUID.randomUUID().toString());
-            payment.put("amount_total", 100.00);
+            payment.put("amount_total", amount);   // 使用方法参数
             payment.put("currency_code", "BRL");
             payment.put("payment_type_code", "creditcard");
 
+            // creditcard 对象
             JSONObject creditcard = new JSONObject();
-            creditcard.put("token", token); // 临时 token
-            creditcard.put("cvv", "123");   // CVV 还是必须传
+            creditcard.put("token", token);      // 临时 token
+            creditcard.put("cvv", "123");        // CVV 必须传
+            creditcard.put("save_card", true);   // 设置保存信用卡
             payment.put("creditcard", creditcard);
 
             requestBody.put("payment", payment);
@@ -156,12 +157,27 @@ public class EbanxApiClient {
 
             log.info("Charge response: {}", response.body());
 
-            return new JSONObject(response.body());
+            JSONObject jsonResponse = new JSONObject(response.body());
+
+            // 提取长期 token（如果支付成功）
+            if (jsonResponse.optBoolean("success")) {
+                JSONObject paymentResult = jsonResponse.getJSONObject("payment");
+                if (paymentResult.has("creditcard")) {
+                    JSONObject ccResult = paymentResult.getJSONObject("creditcard");
+                    if (ccResult.has("token")) {
+                        String longTermToken = ccResult.getString("token");
+                        jsonResponse.put("long_term_token", longTermToken);
+                    }
+                }
+            }
+
+            return jsonResponse;
 
         } catch (Exception e) {
             return new JSONObject().put("success", false).put("message", e.getMessage());
         }
     }
+
 
 
 }
