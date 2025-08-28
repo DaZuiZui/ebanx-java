@@ -201,8 +201,10 @@ public class EbanxApiClient {
             payment.put("currency_code", "BRL");
             payment.put("payment_type_code", "pix");        // Pix支付
             payment.put("name", "Test User");               // 必填
-            payment.put("email", "test@example.com");       // 必填
-            payment.put("document", "39053344705");  // ⚠️ 必填字段
+            payment.put("email", "y51280033@outlook.com");       // 必填
+            payment.put("document", "39053344705");         // ⚠️ 必填字段
+            payment.put("callback_url", "https://49a8eb266a3e.ngrok-free.app/ebanx/webhook");
+
 
             JSONObject person = new JSONObject();
             person.put("name", "Test User");

@@ -25,7 +25,7 @@ public class PixApplication {
 
     @Test
     void pay(){
-        ebanxApiClient.getQR(12312319l,500.00);
+        ebanxApiClient.getQR(10086137l,5999.00);
 
     }
 
