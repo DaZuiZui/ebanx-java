@@ -22,3 +22,5 @@ Clone the project:
 ```bash
 git clone https://github.com/DaZuiZui/ebanx-java.git
 cd ebanx-java
+
+email: bryanyang0225@gmail.com
