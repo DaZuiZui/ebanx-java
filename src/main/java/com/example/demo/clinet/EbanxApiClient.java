@@ -244,4 +244,43 @@ public class EbanxApiClient {
     }
 
 
+    /**
+     * query EBANX payment by hash
+     * @param hash EBANX 返回的 hash，用于查询特定支付
+     * @return JSONObject 返回支付查询结果
+     */
+    public JSONObject queryPayment(String hash) {
+        try {
+            String url = "https://sandbox.ebanxpay.com/ws/query";
+
+            // 构建请求体
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("integration_key", API_KEY); // 替换为你的 API_KEY
+            requestBody.put("hash", hash);
+
+            // 构建 HttpRequest
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            // 发送请求
+            HttpResponse<String> response = HttpClient.newHttpClient()
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+
+            // 解析返回 JSON
+            JSONObject jsonResponse = new JSONObject(response.body());
+            System.out.println("Payment query response: " + jsonResponse.toString());
+
+            return jsonResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject()
+                    .put("success", false)
+                    .put("message", e.getMessage());
+        }
+    }
+
 }
